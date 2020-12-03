@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>旅游-用户管理</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/getParameter.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+
+        // 当页面加载完之后 会执行的函数
+        $(function () {
+            // 我期望打开当前页面 就显示数据库中所有用户的数据
+            load('1');
+        });
+
+        function deleteUser(uid) {
+            var f = window.confirm("您确定要删除吗?");
+            if(f){
+                // 获取到要被删除掉的用户id
+                $.post("user/deleteUser", {uid: uid}, function (flag) {
+                    if (flag) {
+                        // 如果代码执行到这个位置 说明删除操作成功
+                        alert("恭喜删除成功");
+                        location.href = "user_list.html";
+                    } else {
+                        alert("删除失败");
+                    }
+                });
+            }
+
+        }
+
+        function load(currentPage) {
+            $.post("user/findAllUser", {currentPage: currentPage}, function (pb) {
+                var table = $("#tb_user_info").html(); // 空参的html函数 作用为获取该元素内容值
+                // alert(html); // 获取到的是原有前端页面中的内容
+
+                for (var i = 0; i < pb.list.length; i++) {
+                    // 获取到list中的每一个user对象
+                    var user = pb.list[i];
+                    // 进行数据的拼接
+                    table += " <tr>\n" +
+                        "         <td>" + user.uid + "</td>\n" +
+                        "                            <td>" + user.username + "</td>\n" +
+                        "                            <td>" + user.name + "</td>\n" +
+                        "                            <td>" + user.sex + "</td>\n" +
+                        "                            <td>" + user.telephone + "</td>\n" +
+                        "                            <td>" + user.email + "</td>\n" +
+                        "                            <td><a href=\"user_modify.html?uid=" + user.uid + "\" class=\"btn btn-primary btn-lg active\"\n" +
+                        "                                   style=\"height: 30px;width:35%;font-size: 15px;margin: 0px;padding: 0px;line-height: 30px;text-align: center\"\n" +
+                        "                                   role=\"button\">修改</a>&nbsp;&nbsp; / &nbsp;&nbsp;\n" +
+                        "                                <a href=\"javascript:deleteUser(" + user.uid + ")\" class=\"btn btn-primary btn-lg active\"\n" +
+                        "                                   style=\"height: 30px;width:35%;font-size: 15px;margin: 0px;padding: 0px;line-height: 30px;text-align: center\"\n" +
+                        "                                   role=\"button\">删除</a>\n" +
+                        "                            </td>\n" +
+                        "                        </tr>";
+                }
+
+                $("#tb_user_info").html(table); // 如果html中有参数 就是修改该元素的内容值
+
+            });
+
+        }
+
+
+    </script>
+</head>
+<body>
+<!--引入头部-->
+<div id="header"></div>
+<div class="page_one">
+    <div class="contant">
+        <div class="crumbs">
+            <img src="images/search.png" alt="">
+            <p>用户管理><span>&nbsp;&nbsp;&nbsp;管理界面</span></p>
+        </div>
+        <div class="xinxi clearfix">
+            <div class="user_left">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading"></div>
+
+                    <!-- Table -->
+                    <table class="table table-hover table-bordered table-striped">
+                        <tbody id="tb_user_info">
+
+                        <tr>
+                            <td>用户id</td>
+                            <td>账户名称</td>
+                            <td>用户名字</td>
+                            <td>性别</td>
+                            <td>手机号</td>
+                            <td>邮箱</td>
+                            <td>功能</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!--<div class="header">-->
+                <!--<span>用户信息</span>-->
+                <!--<span>用户信息</span>-->
+                <!--<span>用户信息</span>-->
+                <!--<span class="jg">价格</span>-->
+                <!--</div>-->
+
+                <div class="page_num_inf">
+                    <i></i> 共
+                    <span id="totalPage">12</span>页<span id="totalCount">132</span>条
+                </div>
+                <div class="pageNum">
+                    <ul id="pageNum">
+                        <li><a href="">首页</a></li>
+                        <li class="threeword"><a href="#">上一页</a></li>
+                        <li class="curPage"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">6</a></li>
+                        <li><a href="#">7</a></li>
+                        <li><a href="#">8</a></li>
+                        <li><a href="#">9</a></li>
+                        <li><a href="#">10</a></li>
+                        <li class="threeword"><a href="javascript:;">下一页</a></li>
+                        <li class="threeword"><a href="javascript:;">末页</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--引入头部-->
+<div id="footer"></div>
+<!--导入布局js，共享header和footer-->
+<script type="text/javascript" src="js/include.js"></script>
+</body>
+
+</html>

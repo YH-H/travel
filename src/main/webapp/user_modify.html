@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>修改</title>
+        <link rel="stylesheet" type="text/css" href="css/common.css">
+        <link rel="stylesheet" href="css/register.css">
+		<!--导入jquery-->
+		<script src="js/jquery-3.3.1.js"></script>
+		<script src="js/getParameter.js"></script>
+		<script>
+			$(function () {
+
+			    var uid = getParameter("uid");
+
+			    // 数据的回写
+				$.post("user/findOne",{uid:uid},function (user) {
+					//user 就是从数据库中查询到的  uid为当前用户id的信息
+					$("#username").val(user.username);
+					$("#uid").val(user.uid);
+					$("#password").val(user.password);
+					$("#name").val(user.name);
+					$("#sex").val(user.sex);
+					$("#telephone").val(user.telephone);
+					$("#email").val(user.email);
+					$("#birthday").val(user.birthday);
+
+                });
+
+
+
+
+
+
+                //当表单提交时，调用所有的校验方法
+				$("#registerForm").submit(function(){
+					//1.发送数据到服务器
+					if("11"){
+					    //校验通过,发送ajax请求，提交表单的数据   username=zhangsan&password=123
+
+						$.post("user/modifyUser",$(this).serialize(),function(flag){
+
+							if(flag){
+							    alert("修改成功");
+							    //修改成功，跳转成功页面
+								location.href="user_list.html";
+							}else{
+							    //修改失败,给errorMsg添加提示信息
+								alert("修改失败或您没有任何修改");
+
+							}
+						});
+
+					}
+					//2.不让页面跳转
+                    return false;
+                    //如果这个方法没有返回值，或者返回为true，则表单提交，如果返回为false，则表单不提交
+				});
+
+
+
+
+            });
+
+
+		</script>
+
+
+    </head>
+	<body>
+	<!--引入头部-->
+	<div id="header"></div>
+        <!-- 头部 end -->
+    	<div class="rg_layout">
+    		<div class="rg_form clearfix">
+    			<div class="rg_form_left">
+    				<p>用户信息修改</p>
+    				<p>USER INFO MODIFY</p>
+    			</div>
+    			<div class="rg_form_center">
+					<div id="errorMsg" style="color:red;text-align: center"></div>
+					<!--修改表单-->
+    				<form id="registerForm" action="user">
+						<!--提交处理请求的标识符-->
+						<input type="hidden" name="uid" id="uid" value="1">
+    					<table style="margin-top: 25px;">
+    						<tr>
+    							<td class="td_left">
+    								<label for="username">用户名</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="text" id="username" name="username" placeholder="请输入要修改的账号">
+    							</td>
+    						</tr>
+    						<tr>
+    							<td class="td_left">
+    								<label for="password">密码</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="text" id="password" name="password" placeholder="请输入要修改的密码">
+    							</td>
+    						</tr>
+							<tr>
+								<td class="td_left">
+									<label for="name">姓名</label>
+								</td>
+								<td class="td_right">
+									<input type="text" id="name" name="name" placeholder="请输入要修改的真实姓名">
+								</td>
+							</tr>
+							<tr>
+								<td class="td_left">
+									<label for="sex">性别</label>
+								</td>
+								<td class="td_right gender">
+									<input type="radio" id="sex" name="sex" value="男" checked> 男
+									<input type="radio" name="sex" value="女"> 女
+								</td>
+							</tr>
+							<tr>
+								<td class="td_left">
+									<label for="telephone">手机号</label>
+								</td>
+								<td class="td_right">
+									<input type="text" id="telephone" name="telephone" placeholder="请输入要修改的手机号">
+								</td>
+							</tr>
+    						<tr>
+    							<td class="td_left">
+    								<label for="email">Email</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="text" id="email" name="email" placeholder="请输入要修改的Email">
+    							</td>
+    						</tr>
+
+
+
+    						<tr>
+    							<td class="td_left">
+    								<label for="birthday">出生日期</label>
+    							</td>
+    							<td class="td_right">
+    								<input type="date" id="birthday" name="birthday" placeholder="年/月/日">
+    							</td>
+    						</tr>
+
+    						<tr>
+    							<td class="td_left">
+    							</td>
+    							<td class="td_right check">
+    								<input type="submit" class="submit" value="修改">
+									<span id="msg" style="color: red;"></span>
+    							</td>
+    						</tr>
+    					</table>
+    				</form>
+    			</div>
+    			<div class="rg_form_right">
+
+    			</div>
+    		</div>
+    	</div>
+        <!--引入尾部-->
+    	<div id="footer"></div>
+		<!--导入布局js，共享header和footer-->
+		<script type="text/javascript" src="js/include.js"></script>
+
+    </body>
+</html>
